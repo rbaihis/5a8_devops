@@ -20,7 +20,7 @@ ENV SERVER_PORT=8079 \
     LOG_PATH=/logs/timesheet-devops.log
 
 # Create the log directory if it does not exist
-RUN mkdir -p /logs && apt-get update && apt-get install -y curl locales tzdata openjdk-17-dbg
+RUN mkdir -p /logs
 
 # Run the Spring Boot application
 ENTRYPOINT ["java", "-jar", "timesheet-devops.jar"]
