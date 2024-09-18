@@ -1,5 +1,5 @@
 # Use a base image with Java 17 (or adjust to Java 11 if preferred since this project is on java-8 and spring 2.6.4 better check )
-FROM amazoncorretto:17-slim
+FROM amazoncorretto:17
 
 # Set the working directory in the container
 WORKDIR /app
