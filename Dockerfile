@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file into the container
-COPY target/timesheet-devops.jar /app/timesheet-devops.jar
+COPY target/timesheet*.jar /app/timesheet-devops.jar
 
 # Expose the port that the application will run on
 EXPOSE 8079
