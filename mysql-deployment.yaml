@@ -17,12 +17,14 @@ spec:
         image: mysql:5.7
         env:
         - name: MYSQL_ROOT_PASSWORD
-          value: ""  # Change to a secure password
+          value: ""  # Empty root password
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "yes"  # Allow empty root password
         ports:
         - containerPort: 3306
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
-        - name: mysql-persistent-storage
-          emptyDir: {}
+      - name: mysql-persistent-storage
+        emptyDir: {}
