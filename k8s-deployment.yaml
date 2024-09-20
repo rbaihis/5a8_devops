@@ -16,4 +16,4 @@ spec:
       - name: my-app
         image: rbaihis/timesheet:1.0.0-SNAPSHOT
         ports:
-        - containerPort: 8080
+        - containerPort: 8079
