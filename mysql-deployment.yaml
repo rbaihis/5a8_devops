@@ -23,6 +23,6 @@ spec:
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
-  volumes:
-  - name: mysql-persistent-storage
-    emptyDir: {}
+      volumes:
+        - name: mysql-persistent-storage
+          emptyDir: {}
