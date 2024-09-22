@@ -64,15 +64,23 @@
           volumes:
             mysql_data:
 
+    - name: Check if MySQL container is already running
+      command: docker compose ps -q
+      args:
+        chdir: "{{ compose_dir }}"
+      register: compose_status
+      changed_when: false
+
     - name: Ensure Docker Compose is up
-      docker_compose_v2:
-        project_src: "{{ compose_dir }}"
-        state: present
+      command: docker compose up -d
+      args:
+        chdir: "{{ compose_dir }}"
+      when: compose_status.stdout == ""
 
     - name: Wait for MySQL to be ready
       wait_for:
         port: 3306
-        timeout: 60
+        timeout: "{{ wait_timeout }}"  # Use the increased wait time
         state: started
 
     # - name: Create a table if it doesn't exist
