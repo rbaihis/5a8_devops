@@ -1,0 +1,71 @@
+---
+- name: Manage MySQL Docker Compose setup
+  hosts: prodVm
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3  # Ensure you're using Python 3
+    compose_dir: ~/timesheet_docker_setup  
+    compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
+    db_name: timesheet-devops-db
+    db_user: seif
+    db_password: ""  
+    root_password: ""  
+
+  tasks:
+
+    - name: Check if MySQL is already running
+      wait_for:
+        port: 3306
+        timeout: 15 
+        state: started    
+
+    - name: Check if the database exists
+      shell: |
+        mysql -h localhost -P 3306 -u {{ db_user }} -p{{ db_password }} -e "USE {{ db_name }}"
+      register: db_check
+      ignore_errors: yes
+
+    - name: Create the database if it does not exist
+      shell: |
+        mysql -h localhost -P 3306 -u {{ db_user }} -p{{ db_password }} -e "CREATE DATABASE {{ db_name }}"
+      when: db_check.rc != 0
+
+    - name: Create Docker Compose directory
+      file:
+        path: "{{ compose_dir }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create Docker Compose file
+      copy:
+        dest: "{{ compose_file_path }}"
+        content: |
+          version: '3.8'
+          services:
+            timesheet-app:
+              image: timesheet-devops:latest
+              ports:
+                - "8079:8079"
+              environment:
+                SERVER_PORT: 8079
+                DB_HOST: mysql  # Ensure this matches the hostname in your existing Compose setup
+                DB_PORT: 3306
+                DB_NAME: {{ db_name }}
+                DB_USERNAME: {{ db_user }}
+                DB_PASSWORD: {{ db_password }}
+                LOG_PATH: /logs/timesheet-devops.log
+              volumes:
+                - logs:/logs
+          volumes:
+            logs:
+
+    - name: Start Docker Compose
+      command: docker-compose up -d
+      args:
+        chdir: "{{ compose_dir }}"
+
+    - name: Wait for app timesheet port to see if open
+      wait_for:
+        port: 8079
+        timeout: 60 
+        state: started
