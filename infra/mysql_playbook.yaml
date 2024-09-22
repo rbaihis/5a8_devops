@@ -41,6 +41,11 @@
         path: "{{ compose_dir }}"
         state: directory
         mode: '0755'
+    
+    - name: Ensure the Docker network "timesheet-network" exists
+      docker_network:
+        name: timesheet-network
+        state: present
 
     - name: Create Docker Compose file
       copy:
@@ -60,9 +65,11 @@
                 - "3306:3306"
               volumes:
                 - mysql_data:/var/lib/mysql
-
           volumes:
             mysql_data:
+          networks:
+            mysql-network:
+              external: true
 
     - name: Check if MySQL container is already running
       command: docker compose ps -q
