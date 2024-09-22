@@ -42,9 +42,9 @@
         state: directory
         mode: '0755'
     
-    - name: Ensure the Docker network "timesheet-network" exists
+    - name: Ensure the Docker network "mysql-network" exists
       docker_network:
-        name: timesheet-network
+        name: mysql-network
         state: present
 
     - name: Create Docker Compose file
