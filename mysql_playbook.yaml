@@ -80,7 +80,7 @@
     - name: Wait for MySQL to be ready
       wait_for:
         port: 3306
-        timeout: "{{ wait_timeout }}"  # Use the increased wait time
+        timeout: 60 # Use the increased wait time
         state: started
 
     # - name: Create a table if it doesn't exist
