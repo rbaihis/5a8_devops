@@ -3,12 +3,13 @@
   hosts: prodVm
   become: yes
   vars:
-    compose_dir: ~/mysql_docker_setup  # Directory for Docker Compose
-    compose_file_path: "{{ compose_dir }}/docker-compose.yml"  # Path to the compose file
+    ansible_python_interpreter: /usr/bin/python3  # Ensure you're using Python 3
+    compose_dir: ~/mysql_docker_setup  
+    compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
     db_name: timesheet-devops-db
     db_user: root
-    db_password: ""  # Specify if you want a password, or keep it empty
-    root_password: ""  # Specify if you want a root password
+    db_password: ""  
+    root_password: ""  
 
   tasks:
     - name: Ensure Docker SDK for Python is installed
@@ -16,7 +17,7 @@
         name: docker
         state: present
       become: yes
-      
+
     - name: Create Docker Compose directory
       file:
         path: "{{ compose_dir }}"
