@@ -10,6 +10,7 @@
     db_user: seif
     db_password: ""  
     root_password: ""  
+    mysql_container_name: mysql
 
   tasks:
 
@@ -21,13 +22,13 @@
 
     - name: Check if the database exists
       shell: |
-        docker exec {{ mysql}} mysql -u {{ db_user }} -p{{ db_password }} -e "USE {{ db_name }}"
+        docker exec {{ mysql_container_name }} mysql -u root -p'' -e "USE {{ db_name }}"
       register: db_check
       ignore_errors: yes
 
     - name: Create the database if it does not exist
       shell: |
-        docker exec {{ mysql }} mysql -u {{ db_user }} -p{{ db_password }} -e "CREATE DATABASE {{ db_name }}"
+        docker exec {{ mysql_container_name }} mysql -u root -p'' -e "CREATE DATABASE {{ db_name }}"
       when: db_check.rc != 0
 
     - name: Create Docker Compose directory
