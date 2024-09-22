@@ -60,12 +60,12 @@
           #   logs:
 
     - name: Start Docker Compose
-      command: docker-compose up -d
+      command: docker compose up -d
       args:
         chdir: "{{ compose_dir }}"
 
     # - name: Wait for app timesheet port to see if open
     #   wait_for:
     #     port: 8079
-    #     timeout: 120
+    #     timeout: 20
     #     state: started
