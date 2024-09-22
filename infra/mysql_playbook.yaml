@@ -42,12 +42,14 @@
         state: directory
         mode: '0755'
     
-    - name: Ensure the Docker network "timesheet-network" exists
-      community.docker.docker_network:
-        name: timesheet-network
-        state: present
-      environment:
-        DOCKER_HOST: "unix:///var/run/docker.sock"
+    - name: Check if Docker network "mysql-network" exists
+      command: docker network ls --filter name=mysql-network --format "{{ '{{' }}.Name{{ '}}' }}"
+      register: network_check
+      changed_when: false
+
+    - name: Create Docker network "mysql-network" if it does not exist
+      command: docker network create mysql-network
+      when: network_check.stdout == ''
 
     - name: Create Docker Compose file
       copy:
