@@ -30,13 +30,6 @@
         state: present
       become: yes
 
-    - name: Install Docker Compose Python library
-      pip:
-        name: docker-compose
-        state: present
-        become: yes
-
-
     - name: Create Docker Compose directory
       file:
         path: "{{ compose_dir }}"
