@@ -36,14 +36,13 @@
         state: directory
         mode: '0755'
 
-    - name: Create Docker Compose file
+    - name: Create Docker Compose file  for timesheet app
       copy:
         dest: "{{ compose_file_path }}"
         content: |
-          version: '3.8'
           services:
             timesheet-app:
-              image: timesheet-devops:latest
+              image: rbaihis/timesheet:1.0.0-SNAPSHOT
               ports:
                 - "8079:8079"
               environment:
@@ -54,18 +53,18 @@
                 DB_USERNAME: {{ db_user }}
                 DB_PASSWORD: {{ db_password }}
                 LOG_PATH: /logs/timesheet-devops.log
-              volumes:
-                - logs:/logs
-          volumes:
-            logs:
+          #     volumes:
+          #       - logs:/logs
+          # volumes:
+          #   logs:
 
     - name: Start Docker Compose
       command: docker-compose up -d
       args:
         chdir: "{{ compose_dir }}"
 
-    - name: Wait for app timesheet port to see if open
-      wait_for:
-        port: 8079
-        timeout: 60 
-        state: started
+    # - name: Wait for app timesheet port to see if open
+    #   wait_for:
+    #     port: 8079
+    #     timeout: 120
+    #     state: started
