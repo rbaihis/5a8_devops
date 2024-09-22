@@ -24,17 +24,17 @@
         state: present
       when: ansible_facts['os_family'] == 'RedHat'
 
-    - name: Install Docker Compose Python library
-      pip:
-        name: docker-compose
-        state: present
-      become: yes
+    # - name: Install Docker Compose Python library
+    #   pip:
+    #     name: docker-compose
+    #     state: present
+    #   become: yes
 
-    - name: Ensure Docker SDK for Python is installed
-      pip:
-        name: docker
-        state: latest
-      become: yes
+    # - name: Ensure Docker SDK for Python is installed
+    #   pip:
+    #     name: docker
+    #     state: latest
+    #   become: yes
 
     - name: Create Docker Compose directory
       file:
