@@ -7,7 +7,7 @@
     compose_dir: ~/mysql_docker_setup  
     compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
     db_name: timesheet-devops-db
-    db_user: root
+    db_user: seif
     db_password: ""  
     root_password: ""  
 
