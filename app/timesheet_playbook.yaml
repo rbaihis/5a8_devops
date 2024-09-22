@@ -46,18 +46,22 @@
               image: rbaihis/timesheet:1.0.0-SNAPSHOT
               ports:
                 - "8079:8079"
-              # environment:
-              #   SERVER_PORT: 8079
-              #   DB_HOST: mysql  # Ensure this matches the hostname in your existing Compose setup
-              #   DB_PORT: 3306
-              #   DB_NAME: {{ db_name }}
-              #   DB_USERNAME: {{ db_user }}
-              #   DB_PASSWORD: {{ db_password }}
-              #   LOG_PATH: /logs/timesheet-devops.log
-          #     volumes:
-          #       - logs:/logs
+              environment:
+                SERVER_PORT: 8079
+                DB_HOST: mysql  # Ensure this matches the hostname in your existing Compose setup
+                DB_PORT: 3306
+                DB_NAME: timesheet-devops-db
+                DB_USERNAME: seif
+                DB_PASSWORD: openstack
+                LOG_PATH: /logs/timesheet-devops.log
+              networks:
+                - mysql-network
           # volumes:
           #   logs:
+          networks:
+            mysql-network:
+              external: true
+
 
     - name: Start Docker Compose
       command: docker compose up -d
