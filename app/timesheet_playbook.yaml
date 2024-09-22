@@ -59,7 +59,7 @@
           # volumes:
           #   logs:
           networks:
-            mysql-network:
+            mysql-network: # predefined network created as external befor the docker compose of mysql
               external: true
 
 
