@@ -46,14 +46,14 @@
               image: rbaihis/timesheet:1.0.0-SNAPSHOT
               ports:
                 - "8079:8079"
-              environment:
-                SERVER_PORT: 8079
-                DB_HOST: mysql  # Ensure this matches the hostname in your existing Compose setup
-                DB_PORT: 3306
-                DB_NAME: {{ db_name }}
-                DB_USERNAME: {{ db_user }}
-                DB_PASSWORD: {{ db_password }}
-                LOG_PATH: /logs/timesheet-devops.log
+              # environment:
+              #   SERVER_PORT: 8079
+              #   DB_HOST: mysql  # Ensure this matches the hostname in your existing Compose setup
+              #   DB_PORT: 3306
+              #   DB_NAME: {{ db_name }}
+              #   DB_USERNAME: {{ db_user }}
+              #   DB_PASSWORD: {{ db_password }}
+              #   LOG_PATH: /logs/timesheet-devops.log
           #     volumes:
           #       - logs:/logs
           # volumes:
