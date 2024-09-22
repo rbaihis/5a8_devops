@@ -1,5 +1,5 @@
 ---
-- name: Manage MySQL Docker Compose setup
+- name: Manage timesheet app set up
   hosts: prodVm
   become: yes
   vars:
@@ -21,13 +21,13 @@
 
     - name: Check if the database exists
       shell: |
-        mysql -h localhost -P 3306 -u {{ db_user }} -p{{ db_password }} -e "USE {{ db_name }}"
+        docker exec {{ mysql}} mysql -u {{ db_user }} -p{{ db_password }} -e "USE {{ db_name }}"
       register: db_check
       ignore_errors: yes
 
     - name: Create the database if it does not exist
       shell: |
-        mysql -h localhost -P 3306 -u {{ db_user }} -p{{ db_password }} -e "CREATE DATABASE {{ db_name }}"
+        docker exec {{ mysql }} mysql -u {{ db_user }} -p{{ db_password }} -e "CREATE DATABASE {{ db_name }}"
       when: db_check.rc != 0
 
     - name: Create Docker Compose directory
