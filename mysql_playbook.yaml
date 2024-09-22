@@ -46,7 +46,6 @@
       copy:
         dest: "{{ compose_file_path }}"
         content: |
-          version: '3.8'
           services:
             mysql:
               image: mysql
