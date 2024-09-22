@@ -65,7 +65,7 @@
             mysql_data:
 
     - name: Ensure Docker Compose is up
-      community.docker.docker_compose_v2:
+      docker_compose_v2:
         project_src: "{{ compose_dir }}"
         state: present
 
