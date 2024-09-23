@@ -41,7 +41,7 @@
     
     - name: Copy prom_conf/prometheus.yaml to destination only if it does not exist
       ansible.builtin.copy:
-        src: ./prom_conf/prometheus.yml 
+        src: prom_conf/prometheus.yml 
         dest: "{{ prometheus_file_path }}"
         force: no 
 
