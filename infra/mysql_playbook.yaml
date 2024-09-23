@@ -57,7 +57,7 @@
 
     - name: Check if target exists
       set_fact:
-        target_exists: "{{ prometheus_content is search(\"- 'timesheet:8079'\") }}"
+        target_exists: "{{ prometheus_content is search(\"- '192.168.43.10:8079'\") }}"
 
     - name: Add timesheet-devops-service job if both job_name and target are missing
       ansible.builtin.blockinfile:
