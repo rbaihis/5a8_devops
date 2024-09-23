@@ -41,11 +41,11 @@
     
     - name: Copy prom_conf/prometheus.yaml to destination only if it does not exist
       ansible.builtin.copy:
-        src: ./prom_conf/prometheus.yaml 
+        src: ./prom_conf/prometheus.yml 
         dest: "{{ prometheus_file_path }}"
         force: no 
 
-    - name: Read the contents of prometheus.yaml
+    - name: Read the contents of prometheus.yml
       ansible.builtin.slurp:
         src: "{{ prometheus_file_path }}"
       register: prometheus_file
