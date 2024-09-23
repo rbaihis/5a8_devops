@@ -88,6 +88,7 @@
                 - '--storage.tsdb.path=/prometheus'
                 - '--web.console.libraries=/usr/share/prometheus/console_libraries'
                 - '--web.console.templates=/usr/share/prometheus/consoles'
+                - '--web.enable-admin-api=true' # this for allow remote reload  curl -X POST http://ipPromethus:port/-/reload 
               networks:
                 - mysql-network
               restart: unless-stopped
