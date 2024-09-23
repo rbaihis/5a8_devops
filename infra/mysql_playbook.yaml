@@ -61,7 +61,7 @@
 
     - name: Add timesheet-devops-service job if both job_name and target are missing
       ansible.builtin.blockinfile:
-        path: "{{ prometheus_file_path }}"
+        path: "./{{ prometheus_file_path }}"
         marker: "#--------------timesheet---------------------------------"
         block: |
 
