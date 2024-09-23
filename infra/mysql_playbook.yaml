@@ -15,6 +15,7 @@
     root_password: ""  
     mysql_container_name: mysql
 
+
   tasks:
     - name: Install pip3 if not present (Ubuntu/Debian)
       apt:
