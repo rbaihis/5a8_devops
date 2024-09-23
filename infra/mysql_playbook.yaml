@@ -64,11 +64,12 @@
         path: "{{ prometheus_file_path }}"
         marker: "#--------------timesheet---------------------------------"
         block: |
+
           - job_name: 'timesheet-devops-service'
             metrics_path: '/timesheet-devops/actuator/prometheus'
             static_configs:
             - targets:
-              - 'timesheet:8079'
+              - '192.168.43.10:8079'
         insertafter: EOF
       when: not target_exists
 
