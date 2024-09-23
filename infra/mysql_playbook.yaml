@@ -46,34 +46,6 @@
         dest: "{{ prometheus_file_path }}"
         force: no 
 
-    - name: Read the contents of prometheus.yml
-      ansible.builtin.slurp:
-        src: "{{ prometheus_file_path }}"
-      register: prometheus_file
-
-    - name: Decode prometheus.yaml content
-      set_fact:
-        prometheus_content: "{{ prometheus_file.content | b64decode }}"
-
-    - name: Check if target exists
-      set_fact:
-        target_exists: "{{ prometheus_content is search(\"- '192.168.43.10:8079'\") }}"
-
-    - name: Add timesheet-devops-service job if both job_name and target are missing
-      ansible.builtin.blockinfile:
-        path: "{{ prometheus_file_path }}"
-        marker: "#--------------timesheet---------------------------------"
-        block: |
-
-          - job_name: 'timesheet-devops-service'
-            metrics_path: '/timesheet-devops/actuator/prometheus'
-            static_configs:
-            - targets:
-              - '192.168.43.10:8079'
-        insertafter: EOF
-      when: not target_exists
-
-    
     - name: Check if Docker network "mysql-network" exists
       command: docker network ls --filter name=mysql-network --format "{{ '{{' }}.Name{{ '}}' }}"
       register: network_check
