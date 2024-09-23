@@ -8,7 +8,6 @@
     compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
     prometheus_dir: "{{ compose_dir }}/prom_conf"  
     prometheus_file_path: "{{ prometheus_dir }}/prometheus.yml"
-
     db_name: timesheet-devops-db
     db_user: seif
     db_password: "openstack"  
@@ -103,7 +102,7 @@
                 - GF_FEATURE_TOGGLES_ENABLE=accessControlOnCall
                 - GF_INSTALL_PLUGINS=https://storage.googleapis.com/integration-artifacts/grafana-lokiexplore-app/grafana-lokiexplore-app-latest.zip;grafana-lokiexplore-app
                 - GF_DATASOURCES__DEFAULT__TYPE=prometheus
-                - GF_DATASOURCES__DEFAULT__URL=http://prometheus:9090
+                - GF_DATASOURCES__DEFAULT__URL=http://192.168.43.10:9090
                 - GF_DATASOURCES__DEFAULT__ACCESS=proxy
               ports:
                 - "3000:3000"
