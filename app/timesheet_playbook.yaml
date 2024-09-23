@@ -109,4 +109,4 @@
 
     - name: Reload Prometheus configuration
       command: curl -X POST http://192.168.43.10:9090/-/reload
-      ignore_errors: yes  # This allows the playbook to continue even if this task fails
+      ignore_errors: no  # This allows the playbook to continue even if this task fails
