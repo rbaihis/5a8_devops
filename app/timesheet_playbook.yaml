@@ -93,10 +93,9 @@
     - name: Add timesheet-devops-service job if both job_name and target are missing
       ansible.builtin.blockinfile:
         path: "{{ prometheus_file_path }}"
-        marker: |
-          
-          #--------------timesheet-devops-service---------------------------------
+        # marker: #--------------timesheet-devops-service---------------------------------
         block: |
+          #--------------timesheet-devops-service---------------------------------
           - job_name: 'timesheet-devops-service'
             metrics_path: '/timesheet-devops/actuator/prometheus'
             static_configs:
@@ -104,6 +103,7 @@
               - '192.168.43.10:8079'
               labels:
                 group: 'timesheet-API'
+          
         insertafter: EOF
       when: not target_exists
 

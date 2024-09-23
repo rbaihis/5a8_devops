@@ -82,7 +82,9 @@
                 - "9090:9090"
               volumes:
                 - prom:/prometheus
-                - {{ prometheus_file_path }}:/etc/prometheus/prometheus.yml
+                #remote upload wont work if file only mounted (container can't see changes in this situation so no changes re noticed acutually unless completely restarte)
+                #- {{ prometheus_file_path }}:/etc/prometheus/prometheus.yml
+                - {{ prometheus_dir }}:/etc/prometheus
               command:
                 - '--config.file=/etc/prometheus/prometheus.yml'
                 - '--storage.tsdb.path=/prometheus'
