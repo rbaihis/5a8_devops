@@ -108,5 +108,5 @@
       when: not target_exists
 
     - name: Reload Prometheus configuration
-      command: docker exec -it prometheus curl -X POST http://192.168.43.10:9090/-/reload
+      command: curl -X POST http://192.168.43.10:9090/-/reload
       ignore_errors: yes  # This allows the playbook to continue even if this task fails
