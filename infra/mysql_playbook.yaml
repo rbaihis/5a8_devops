@@ -47,7 +47,7 @@
 
     - name: Read the contents of prometheus.yaml
       ansible.builtin.slurp:
-        src: /path/to/prometheus.yaml
+        src: "{{ prometheus_file_path }}"
       register: prometheus_file
 
     - name: Decode prometheus.yaml content
