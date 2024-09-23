@@ -6,6 +6,8 @@
     ansible_python_interpreter: /usr/bin/python3  # Ensure you're using Python 3
     compose_dir: ~/timesheet_docker_setup  
     compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
+    prometheus_dir: "~/mysql_docker_setup/prom_conf"  
+    prometheus_file_path: "{{ prometheus_dir }}/prometheus.yml"
     db_name: timesheet-devops-db
     db_user: seif
     db_password: "openstack"  
@@ -68,8 +70,43 @@
       args:
         chdir: "{{ compose_dir }}"
 
+
     # - name: Wait for app timesheet port to see if open
     #   wait_for:
     #     port: 8079
     #     timeout: 20
     #     state: started
+
+    - name: Read the contents of prometheus.yml
+      ansible.builtin.slurp:
+        src: "{{ prometheus_file_path }}"
+      register: prometheus_file
+
+    - name: Decode prometheus.yaml content
+      set_fact:
+        prometheus_content: "{{ prometheus_file.content | b64decode }}"
+
+    - name: Check if target exists
+      set_fact:
+        target_exists: "{{ prometheus_content is search(\"- '192.168.43.10:8079'\") }}"
+
+    - name: Add timesheet-devops-service job if both job_name and target are missing
+      ansible.builtin.blockinfile:
+        path: "{{ prometheus_file_path }}"
+        marker: |
+          
+          #--------------timesheet-devops-service---------------------------------
+        block: |
+          - job_name: 'timesheet-devops-service'
+            metrics_path: '/timesheet-devops/actuator/prometheus'
+            static_configs:
+            - targets:
+              - '192.168.43.10:8079'
+              labels:
+                group: 'timesheet-API'
+        insertafter: EOF
+      when: not target_exists
+
+    - name: Reload Prometheus configuration
+      command: docker exec -it prometheus curl -X POST http://localhost:9090/-/reload
+      ignore_errors: yes  # This allows the playbook to continue even if this task fails
