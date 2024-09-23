@@ -66,18 +66,19 @@
             mysql-network:
               external: true
 
+    - name: Ensure Docker Compose is up
+      command: docker compose up -d
+      args:
+        chdir: "{{ compose_dir }}"
+      when: compose_status.stdout == ""
+
+      
     - name: Check if MySQL container is already running
       command: docker compose ps -q mysql
       args:
         chdir: "{{ compose_dir }}"
       register: compose_status
       changed_when: false
-
-    - name: Ensure Docker Compose is up
-      command: docker compose up -d
-      args:
-        chdir: "{{ compose_dir }}"
-      when: compose_status.stdout == ""
 
     - name: Wait for MySQL to be ready
       wait_for:
