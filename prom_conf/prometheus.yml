@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+#-----------promethus-----------------------------
+- job_name: 'prometheus'
+  static_configs:
+  - targets: ['prometheus:9090']
+
+# #--------------timesheet---------------------------------
+# - job_name: 'timesheet-devops-service'
+#   metrics_path: '/timesheet-devops/actuator/prometheus'
+#   static_configs:
+#   - targets:
+#     - 'timesheet:8079'
