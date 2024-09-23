@@ -10,6 +10,7 @@
     db_user: seif
     db_password: "openstack"  
     root_password: ""  
+    mysql_container_name: mysql
 
   tasks:
     - name: Install pip3 if not present (Ubuntu/Debian)
@@ -84,10 +85,15 @@
         timeout: 60 # Use the increased wait time
         state: started
 
-    - name: Ensure MySQL database is created inside the container if not exists
-      command: docker exec mysql mysql -u{{ db_user }} -p{{ db_password }} -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
-      register: db_creation_status
-      changed_when: "'Database changed' in db_creation_status.stdout"
+    - name: Create the database if it does not exist
+      shell: |
+        docker exec {{ mysql_container_name }} mysql mysql -u {{ db_user }} -p{{ db_password }} -e "CREATE DATABASE {{ db_name }}"
+      when: db_check.rc != 0
+      
+    # - name: Ensure MySQL database is created inside the container if not exists
+    #   command: docker exec mysql mysql -u{{ db_user }} -p{{ db_password }} -e "CREATE DATABASE IF NOT EXISTS {{ db_name }};"
+    #   register: db_creation_status
+    #   changed_when: "'Database changed' in db_creation_status.stdout"
 
     - name: Output the database creation status
       debug:
