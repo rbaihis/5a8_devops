@@ -85,7 +85,7 @@
         state: started
 
     - name: Ensure MySQL database is created if not exists
-      mysql_db:
+      mysqlclient:
         login_user: "{{ db_user }}"
         login_password: "{{ db_password }}"
         name: "{{ db_name }}"
