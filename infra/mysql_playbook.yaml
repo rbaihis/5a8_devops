@@ -104,8 +104,8 @@
               networks:
                 - mysql-network
           #---------------------monitoring---------------------------------
-            prometehus:
-              container_name: prometehus
+            prometheus:
+              container_name: prometheus
               image: prom/prometheus
               ports:
                 - "9090:9090"
