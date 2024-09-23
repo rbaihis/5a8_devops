@@ -3,12 +3,12 @@
   hosts: prodVm
   become: yes
   vars:
-    ansible_python_interpreter: /usr/bin/python3  # Ensure you're using Python 3
+    ansible_python_interpreter: /usr/bin/python3  # Ensure Python 3 usage
     compose_dir: ~/mysql_docker_setup  
     compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
     db_name: timesheet-devops-db
     db_user: seif
-    db_password: ""  
+    db_password: "openstack"  
     root_password: ""  
 
   tasks:
@@ -23,18 +23,6 @@
         name: python3-pip
         state: present
       when: ansible_facts['os_family'] == 'RedHat'
-
-    # - name: Install Docker Compose Python library
-    #   pip:
-    #     name: docker-compose
-    #     state: present
-    #   become: yes
-
-    # - name: Ensure Docker SDK for Python is installed
-    #   pip:
-    #     name: docker
-    #     state: latest
-    #   become: yes
 
     - name: Create Docker Compose directory
       file:
@@ -57,26 +45,28 @@
         content: |
           services:
             mysql:
-              image: mysql
+              image: mysql:latest
               container_name: mysql
               environment:
                 MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-                MYSQL_ROOT_PASSWORD: {{ root_password }}
-                MYSQL_DATABASE: {{ db_name }}
-                MYSQL_USER: {{ db_user }}
-                MYSQL_PASSWORD: {{ db_password }}
+                MYSQL_ROOT_PASSWORD: "{{ root_password }}"
+                MYSQL_DATABASE: "{{ db_name }}"
+                MYSQL_USER: "{{ db_user }}"
+                MYSQL_PASSWORD: "{{ db_password }}"
               ports:
                 - "3306:3306"
               volumes:
                 - mysql_data:/var/lib/mysql
+              networks:
+                - mysql-network
           volumes:
-            mysql_data:
+            mysql_data: {}
           networks:
             mysql-network:
               external: true
 
     - name: Check if MySQL container is already running
-      command: docker compose ps -q
+      command: docker compose ps -q mysql
       args:
         chdir: "{{ compose_dir }}"
       register: compose_status
@@ -94,15 +84,13 @@
         timeout: 60 # Use the increased wait time
         state: started
 
-    # - name: Create a table if it doesn't exist
-    #   mysql_query:
-    #     login_user: "{{ db_user }}"
-    #     login_password: "{{ db_password }}"
-    #     db: "{{ db_name }}"
-    #     query: "CREATE TABLE IF NOT EXISTS my_table (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(255));"
-    #   register: query_result
+    - name: Ensure MySQL database is created if not exists
+      mysql_db:
+        login_user: "{{ db_user }}"
+        login_password: "{{ db_password }}"
+        name: "{{ db_name }}"
+        state: present
 
-    # - name: Output the table creation status
-    #   debug:
-    #     msg: "Table created or already exists."
-    #   when: query_result.changed == false
+    - name: Output the database creation status
+      debug:
+        msg: "Database '{{ db_name }}' has been ensured to exist."
