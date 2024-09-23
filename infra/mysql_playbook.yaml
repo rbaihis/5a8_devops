@@ -7,7 +7,7 @@
     compose_dir: ~/mysql_docker_setup  
     compose_file_path: "{{ compose_dir }}/docker-compose.yml"  
     prometheus_dir: "{{ compose_dir }}/prom_conf"  
-    prometheus_file_path: "{{ prometheus_dir }}/prom_conf/prometheus.yml"
+    prometheus_file_path: "{{ prometheus_dir }}/prometheus.yml"
 
     db_name: timesheet-devops-db
     db_user: seif
